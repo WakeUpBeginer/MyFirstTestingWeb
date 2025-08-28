@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - ShopHub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #f8f9fa !important;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            border: none;
+            width: 100%;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 80px 0 60px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer ul li a:hover {
+            color: white;
+        }
+
+        .cart-count {
+            background: #f5576c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        /* Cart Section */
+        .cart-section {
+            padding: 60px 0;
+        }
+
+        .cart-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .cart-header {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .cart-item-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-right: 1.5rem;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f5576c;
+            margin-bottom: 0.5rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .qty-btn {
+            background: #f8f9fa;
+            color: #333;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .qty-btn:hover {
+            background: #e9ecef;
+        }
+
+        .qty-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 0.25rem;
+            font-weight: 600;
+        }
+
+        .remove-item {
+            color: #dc3545;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-item:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-summary {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .summary-title {
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .total-row {
+            border-top: 1px solid #e9ecef;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .total-title {
+            font-weight: 700;
+        }
+
+        .total-value {
+            font-weight: 700;
+            color: #f5576c;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .continue-shopping {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #667eea;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .continue-shopping:hover {
+            color: #5a6fd8;
+            text-decoration: underline;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            color: #e9ecef;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-cart-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart-text {
+            color: #6c757d;
+            margin-bottom: 2rem;
+        }
+
+        .cart-count {
+            background: #f5576c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-item-image {
+                width: 100%;
+                height: 200px;
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .quantity-controls {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="Firstpage.html">
+                <i class="fas fa-shopping-bag"></i> ShopHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Firstpage.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="NewProduct.html">New Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="BestSellers.html">Best Sellers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="promotion.html">Promotions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="aboutUs.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="review.html">Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <div class="search-box d-flex me-3 position-relative">
+                    <input type="text" class="form-control" placeholder="Discover amazing products..." id="searchInput">
+                    <button type="button"
+                        onclick="searchManager.performSearch(document.getElementById('searchInput').value)">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="cart.html" onclick="showCartModal()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cartCount" class="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="account.html" onclick="showLoginPrompt()">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Your Shopping Cart</h1>
+                <p class="hero-subtitle">Review your items before checkout</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section class="cart-section">
+        <div class="container">
+            <div class="cart-container">
+                <div class="cart-header">
+                    <h2>Your Cart (<span id="itemCount">0</span> items)</h2>
+                </div>
+
+                <div id="cartItemsContainer">
+                    <!-- Cart items will be dynamically inserted here -->
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3 class="empty-cart-title">Your cart is empty</h3>
+                        <p class="empty-cart-text">Start shopping to add items to your cart</p>
+                        <a href="Firstpage.html" class="btn btn-primary">Continue Shopping</a>
+                    </div>
+                </div>
+
+                <div id="cartSummaryContainer" style="display: none;">
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span class="summary-title">Subtotal</span>
+                            <span class="summary-value" id="subtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-title">Shipping</span>
+                            <span class="summary-value">FREE</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-title">Tax</span>
+                            <span class="summary-value" id="tax">$0.00</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span class="summary-title total-title">Total</span>
+                            <span class="summary-value total-value" id="total">$0.00</span>
+                        </div>
+                        <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                        <a href="Firstpage.html" class="continue-shopping">
+                            <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>ShopHub</h5>
+                    <p>Your trusted partner in discovering premium quality products that enhance your lifestyle and
+                        bring value to every purchase.</p>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="Firstpage.html">Home</a></li>
+                        <li><a href="category.html">Categories</a></li>
+                        <li><a href="NewProduct.html">New Products</a></li>
+                        <li><a href="BestSellers.html">Best Sellers</a></li>
+                        <li><a href="promotion.html">Promotions</a></li>
+                        <li><a href="aboutUs.html">About Us</a></li>
+                        <li><a href="review.html">Reviews</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Customer Care</h5>
+                    <ul>
+                        <li><a href="support-center.html">Support Center</a></li>
+                        <li><a href="easy-returns.html">Easy Returns</a></li>
+                        <li><a href="fast-shipping.html">Fast Shipping</a></li>
+                        <li><a href="order-tracking.html">Order Tracking</a></li>
+                    </ul>
+                </div>
+            </div>
+        <hr style="border-color: #555;">
+        <div class="text-center">
+    <p>&copy; 2025 ShopHub. All rights reserved. Crafted with care for exceptional shopping experiences. (Just learning purpose)</p>
+    
+    <p>Some pictures from:</p>
+    <ul style="list-style-type: none; padding: 0;">
+        <li><a href="https://www.vintagehardware.com" target="_blank">Vintage Hardware</a></li>
+        <li><a href="https://shopee.com.my/list/candle" target="_blank">Shopee (Candle Section)</a></li>
+        <li><a href="https://www.lecreuset.com.my" target="_blank">Le Creuset Malaysia(mug product)</a></li>
+        <li><a href="http://www.ebay.com" target="_blank">eBay (Snail Mucin Serum Product)</a></li>
+    </ul>
+</div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <script>
+        // Storage Technologies Implementation
+        let cart = [];
+        let user = {
+            name: '',
+            preferences: {},
+            visitCount: 0
+        };
+
+       const productImages = {
+            // --- Home Hardware (8 items: brassdoor1..8) ---
+            'brassdoor1': 'asset/BrassDoor1.png',
+            'brassdoor2': 'asset/BrassDoor2.png',
+            'brassdoor3': 'asset/BrassDoor3.png',
+            'brassdoor4': 'asset/BrassDoor4.png',
+            'brassdoor5': 'asset/BrassDoor5.png',
+            'brassdoor6': 'asset/BrassDoor6.png',
+            'brassdoor7': 'asset/BrassDoor7.png',
+            'brassdoor8': 'asset/BrassDoor8.png',
+
+            // --- Drinkware (8 items: mug1..mug8) ---
+            'mug1': 'asset/mug3.png',   // Stainless Steel Tumbler - Black
+            'mug2': 'asset/mug1.png',   // Insulated Tumbler - Orange
+            'mug3': 'asset/mug2.png',   // Travel Tumbler - Pink
+            'mug5': 'asset/mug4.png',   // Sport Tumbler - Blue
+            'mug6': 'asset/mug5.png',   // Premium Tumbler - Red
+            'mug7': 'asset/mug6.png',   // Eco Tumbler - Yellow
+            'mug8': 'asset/mug7.png',   // Luxury Tumbler - Green
+            
+
+            // --- Candles (8 items) ---
+            'lavender-candle': 'asset/Lavender_Candle.png',       // Premium Lavender Scented Candle
+            'lavendercandle': 'asset/LavenderCandle.png',         // Aromatherapy Lavender Candle
+            'soycandle': 'asset/Candle_SoyBlend_Lavender_BoxCandle.png', // Soy Blend Lavender Box Candle
+            'provencecandle': 'asset/ProvenceLavenderCandle.png', // Provence Lavender Luxury Candle
+            'votivecandle': 'asset/Votive_Lavender_Front.png',    // Votive Lavender Candle
+            'softlavendercandle': 'asset/SoftLavender.png',       // Soft Lavender Scented Candle
+            'whiteagecandle': 'asset/whitesagelavender.png',      // White Sage Lavender Candle
+            'tasmanian-candle': 'asset/tasmanian-lavender-scented-soy-candle.png', // Tasmanian Lavender Soy Candle
+
+            // --- Skincare (8 items) ---
+            'skincare': 'asset/SnailMucinSerum.png',              // Advanced Snail Mucin Serum
+            'snailserum2': 'asset/SnailMucinSerum2.png',          // Hydrating Snail Essence
+            'snailserum3': 'asset/SnailMucinSerum3.png',          // Repair Snail Treatment
+            'snailserum4': 'asset/SnailMucinSerum4.png',          // Premium Snail Concentrate
+            'snailserum5': 'asset/SnailMucinSerum5.png',          // Intensive Snail Ampoule
+            'snailserum6': 'asset/SnailMucinSerum6.png',          // Rejuvenating Snail Serum
+            'snailproduct': 'asset/SnailMucinSerumProduct.png',   // Complete Snail Care Set
+            'snailinterface': 'asset/SnailMucinSerumInterface.png', // Professional Snail Interface
+
+            // --- promo-section ---
+            'water-bottle': 'asset/mugLook.png',
+            'home-hardware': "asset/BrassDoor1.png"
+        };
+
+        // 2) Title mapping
+        const productTitles = {
+            // --- Home Hardware ---
+            'brassdoor1': 'Classic Brass Door Handle',
+            'brassdoor2': 'Vintage Brass Door Handle',
+            'brassdoor3': 'Antique Brass Door Handle',
+            'brassdoor4': 'Modern Brass Door Handle',
+            'brassdoor5': 'Decorative Brass Door Handle',
+            'brassdoor6': 'Premium Brass Door Handle',
+            'brassdoor7': 'Luxury Brass Door Handle',
+            'brassdoor8': 'Elite Brass Door Handle',
+
+            // --- Drinkware ---
+            'mug1': 'Stainless Steel Tumbler - Black',
+            'mug2': 'Insulated Tumbler - Orange',
+            'mug3': 'Travel Tumbler - Pink',
+            'mug5': 'Premium Tumbler - Blue',
+            'mug6': 'Eco Tumbler - Red',
+            'mug7': 'Luxury Tumbler - Yellow',
+            'mug8': 'Travel Tumbler - Green',
+
+
+            // --- Candles ---
+            'lavender-candle': 'Premium Lavender Scented Candle',
+            'lavendercandle': 'Aromatherapy Lavender Candle',
+            'soycandle': 'Soy Blend Lavender Box Candle',
+            'provencecandle': 'Provence Lavender Luxury Candle',
+            'votivecandle': 'Votive Lavender Candle',
+            'softlavendercandle': 'Soft Lavender Scented Candle',
+            'whiteagecandle': 'White Sage Lavender Candle',
+            'tasmanian-candle': 'Tasmanian Lavender Soy Candle',
+
+            // --- Skincare ---
+            'skincare': 'Advanced Snail Mucin Serum',
+            'snailserum2': 'Hydrating Snail Essence',
+            'snailserum3': 'Repair Snail Treatment',
+            'snailserum4': 'Premium Snail Concentrate',
+            'snailserum5': 'Intensive Snail Ampoule',
+            'snailserum6': 'Rejuvenating Snail Serum',
+            'snailproduct': 'Complete Snail Care Set',
+            'snailinterface': 'Professional Snail Interface',
+       
+            // --- promo-section ---
+            'water-bottle': 'Eco-Friendly Water Bottle',
+            'home-hardware': 'Classic Brass Door Handle'
+
+        };
+        
+        // Initialize page
+        $(document).ready(function () {
+            initializeStorage();
+            loadUserData();
+            loadCart();
+            updateCartCount();
+            renderCartItems();
+        });
+
+        // Initialize storage technologies
+        function initializeStorage() {
+            if (!getCookie('visited')) {
+                setCookie('visited', 'true', 30);
+                user.visitCount = 1;
+            } else {
+                user.visitCount = parseInt(getCookie('visitCount') || '1') + 1;
+            }
+            setCookie('visitCount', user.visitCount.toString(), 30);
+
+            const savedPreferences = JSON.parse(getCookie('userPreferences') || '{}');
+            user.preferences = savedPreferences;
+
+            if (!getCookie('sessionId')) {
+                setCookie('sessionId', generateSessionId(), 1);
+                setCookie('sessionStart', new Date().toISOString(), 1);
+            }
+        }
+
+        // Cookie management functions
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                let c = cookie.trim();
+                if (c.indexOf(nameEQ) == 0) {
+                    return c.substring(nameEQ.length);
+                }
+            }
+            return null;
+        }
+
+        // Load user data
+        function loadUserData() {
+            const savedUser = getCookie('userData');
+            if (savedUser) {
+                try {
+                    const userData = JSON.parse(savedUser);
+                    user.name = userData.name || '';
+                } catch (e) {
+                    user.name = savedUser;
+                }
+            }
+        }
+
+        // Cart functionality
+        function loadCart() {
+            const savedCart = getCookie('shoppingCart');
+            if (savedCart) {
+                try {
+                    cart = JSON.parse(savedCart);
+                } catch (e) {
+                    cart = [];
+                }
+            }
+        }
+
+        function updateCart() {
+            setCookie('shoppingCart', JSON.stringify(cart), 7);
+            updateCartCount();
+            renderCartItems();
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        function renderCartItems() {
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const cartSummaryContainer = document.getElementById('cartSummaryContainer');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3 class="empty-cart-title">Your cart is empty</h3>
+                        <p class="empty-cart-text">Start shopping to add items to your cart</p>
+                        <a href="Firstpage.html" class="btn btn-primary">Continue Shopping</a>
+                    </div>
+                `;
+                cartSummaryContainer.style.display = 'none';
+                return;
+            }
+
+            // Show cart items
+            let cartItemsHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                cartItemsHTML += `
+                    <div class="cart-item" data-id="${item.id}">
+                        <div class="cart-item-image">
+                            <img src="${productImages[item.id]}" alt="${productTitles[item.id]}">
+                        </div>
+                        <div class="cart-item-details">
+                            <h4 class="cart-item-title">${productTitles[item.id]}</h4>
+                            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <input type="number" class="qty-input" value="${item.quantity}" min="1" max="10" onchange="updateQuantityInput(${index}, this.value)">
+                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="cart-item-total">
+                            <div class="cart-item-price">$${itemTotal.toFixed(2)}</div>
+                            <button class="remove-item" onclick="removeItem(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartItemsContainer.innerHTML = cartItemsHTML;
+
+            // Update summary
+            const tax = subtotal * 0.03; // 3% tax for example
+            const total = subtotal + tax;
+
+            document.getElementById('itemCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+
+            cartSummaryContainer.style.display = 'block';
+        }
+
+        function updateQuantity(index, change) {
+            const newQuantity = cart[index].quantity + change;
+            if (newQuantity < 1 || newQuantity > 10) return;
+
+            cart[index].quantity = newQuantity;
+            updateCart();
+        }
+
+        function updateQuantityInput(index, value) {
+            const newQuantity = parseInt(value) || 1;
+            if (newQuantity < 1) {
+                cart[index].quantity = 1;
+            } else if (newQuantity > 10) {
+                cart[index].quantity = 10;
+            } else {
+                cart[index].quantity = newQuantity;
+            }
+            updateCart();
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function proceedToCheckout() {
+            alert('Proceeding to checkout! In a real application, this would redirect to a checkout page.');
+        }
+
+        function showAccount() {
+            const sessionId = getCookie('sessionId');
+            const sessionStart = getCookie('sessionStart');
+
+            let accountInfo = `Your Account Dashboard:\n\n`;
+            accountInfo += `Name: ${user.name || 'Welcome Guest'}\n`;
+            accountInfo += `Total Visits: ${user.visitCount}\n`;
+            accountInfo += `Session ID: ${sessionId || 'New Session'}\n`;
+
+            if (sessionStart) {
+                accountInfo += `Current Session: ${new Date(sessionStart).toLocaleString()}\n`;
+            }
+
+            accountInfo += `\nThank you for being part of the ShopHub community!`;
+            alert(accountInfo);
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                const searches = JSON.parse(getCookie('searchHistory') || '[]');
+                searches.unshift(searchTerm);
+                if (searches.length > 10) searches.pop();
+                setCookie('searchHistory', JSON.stringify(searches), 30);
+                alert(`Searching for "${searchTerm}"...\n\nWe're finding the best products that match your search!`);
+            } else {
+                alert('Please enter a search term to discover amazing products!');
+            }
+        }
+
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        }
+
+        // Navigation to product page
+        function goToProduct(productType) {
+            setCookie('returnPage', 'cart', 1);
+            window.location.href = `productDetail.html?product=${productType}`;
+        }
+    </script>
+</body>
+
+</html>

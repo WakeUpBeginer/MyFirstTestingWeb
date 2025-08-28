@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopHub - Product Categories</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --accent-color: #4facfe;
+      --success-color: #28a745;
+      --danger-color: #f5576c;
+      --warning-color: #ffc107;
+      --dark-color: #333;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --border-radius: 15px;
+      --box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      color: var(--dark-color);
+    }
+
+    /* Header Styles */
+    .navbar {
+      background: var(--primary-gradient);
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--white) !important;
+    }
+
+    .navbar-nav .nav-link {
+      color: var(--white) !important;
+      font-weight: 500;
+      margin: 0 0.5rem;
+      transition: var(--transition);
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #f8f9fa !important;
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      color: #f8f9fa !important;
+      font-weight: 600;
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 400px;
+    }
+
+    .search-box input {
+      border-radius: 25px;
+      padding: 0.5rem 1rem;
+      border: none;
+      width: 100%;
+    }
+
+    .search-box button {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: #667eea;
+      color: var(--white);
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: var(--secondary-gradient);
+      padding: 100px 0;
+      color: var(--white);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,12,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+      background-size: cover;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+
+    .cta-button {
+      background: var(--white);
+      color: var(--accent-color);
+      padding: 15px 40px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      display: inline-block;
+      transition: var(--transition);
+      animation: fadeInUp 1s ease 0.6s both;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+      color: var(--accent-color);
+    }
+
+    /* Category Filter Bar */
+    .filter-bar {
+      background: var(--white);
+      padding: 2rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 76px;
+      z-index: 100;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 2px solid var(--primary-gradient);
+      color: #667eea;
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .filter-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-gradient);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .filter-btn:hover::before,
+    .filter-btn.active::before {
+      left: 0;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      color: var(--white);
+      border-color: transparent;
+    }
+
+    /* Category Sections */
+    .category-section {
+      padding: 80px 0;
+    }
+
+    .category-section:nth-child(even) {
+      background: var(--light-bg);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 3rem;
+      color: var(--dark-color);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--secondary-gradient);
+      border-radius: 2px;
+    }
+
+    .product-card {
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: var(--transition);
+      border: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      height: 100%;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+
+    .product-image {
+      height: 280px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-info {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      height: 240px; /* Fixed height for consistent button alignment */
+    }
+
+    .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+    .product-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    .product-info .spacer {
+      flex-grow: 1; /* Ensure spacer takes up remaining space */
+    }
+
+    .add-to-cart {
+      margin-top: auto; /* Align button to bottom */
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: var(--transition);
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .add-to-cart:hover {
+      background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .category-label {
+      background: var(--primary-gradient);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    /* Search Results */
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--box-shadow);
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+
+    .search-result-item {
+      padding: 1rem;
+      border-bottom: 1px solid #e9ecef;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .search-result-item:hover {
+      background: var(--light-bg);
+    }
+
+    .search-result-name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .search-result-price {
+      color: var(--danger-color);
+      font-weight: 600;
+    }
+
+    .search-result-category {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    /* Cart Modal */
+    .cart-modal .modal-content {
+      border-radius: var(--border-radius);
+      border: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .cart-item {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .cart-item-price {
+      color: var(--danger-color);
+      font-weight: 500;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 1rem;
+    }
+
+    .quantity-btn {
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .quantity-display {
+      min-width: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .remove-item {
+      background: var(--danger-color);
+      color: var(--white);
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+    }
+
+    .cart-total {
+      background: var(--light-bg);
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .cart-total h5 {
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .total-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--danger-color);
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    .custom-toast {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+      padding: 15px;
+    }
+
+    .cart-count {
+      background: var(--danger-color);
+      color: var(--white);
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* Welcome Message */
+    .welcome-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 9999;
+      transform: translateX(400px);
+      transition: all 0.5s ease;
+    }
+
+    .welcome-message.show {
+      transform: translateX(0);
+    }
+
+    .close-welcome {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    .footer {
+      background: #333;
+      color: white;
+      padding: 40px 0 20px;
+    }
+
+    .footer h5 {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .footer ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer ul li a:hover {
+      color: white;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Loading Animation */
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .search-box {
+        margin: 1rem 0;
+      }
+
+      .product-image {
+        height: 220px;
+      }
+
+      .product-info {
+        height: 200px; /* Adjusted for mobile to maintain proportions */
+      }
+
+      .product-title {
+        min-height: 40px; /* Slightly smaller for mobile */
+      }
+
+      .filter-buttons {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .filter-btn {
+        flex-shrink: 0;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .quantity-controls {
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Welcome Message -->
+  <div id="welcomeMessage" class="welcome-message">
+    <span id="welcomeText"></span>
+    <button class="close-welcome" onclick="closeWelcome()">&times;</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="FirstPage.html">
+        <i class="fas fa-shopping-bag"></i> ShopHub
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="FirstPage.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="category.html">Categories</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="NewProduct.html">New Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="BestSellers.html">Best Sellers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="promotion.html">Promotions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="aboutUs.html">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="review.html">Reviews</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+        </ul>
+        <div class="search-box d-flex me-3 position-relative">
+          <input type="text" class="form-control" placeholder="Discover amazing products..." id="searchInput">
+          <button type="button" onclick="searchManager.performSearch(document.getElementById('searchInput').value)">
+            <i class="fas fa-search"></i>
+          </button>
+          <div class="search-results" id="searchResults"></div>
+        </div>
+        <ul class="navbar-nav">
+          <li class="nav-item position-relative">
+            <a class="nav-link" href="cart.html" onclick="showCartModal()">
+              <i class="fas fa-shopping-cart"></i>
+              <span id="cartCount" class="cart-count">0</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="account.html">
+              <i class="fas fa-user"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">🏷️ Explore Our Categories</h1>
+        <p class="hero-subtitle">Discover premium products organized by category - Find exactly what you're looking for</p>
+        <a href="#categories" class="cta-button">Browse Categories</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Bar -->
+  <section class="filter-bar">
+    <div class="container">
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="categoryDisplayManager.filterByCategory('all')">All Products</button>
+        <button class="filter-btn" onclick="categoryDisplayManager.filterByCategory('Home Hardware')">🚪 Home Hardware</button>
+        <button class="filter-btn" onclick="categoryDisplayManager.filterByCategory('Drinkware')">🥤 Drinkware</button>
+        <button class="filter-btn" onclick="categoryDisplayManager.filterByCategory('Candles')">🕯️ Candles</button>
+        <button class="filter-btn" onclick="categoryDisplayManager.filterByCategory('Skincare')">✨ Skincare</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Grid -->
+  <section id="categories" class="category-section">
+    <div class="container">
+      <div id="productsContainer">
+        <!-- Products will be loaded dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Modal -->
+  <div class="modal fade cart-modal" id="cartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="fas fa-shopping-cart me-2"></i>Your Shopping Cart
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="cartItems">
+            <!-- Cart items will be populated here -->
+          </div>
+          <div class="cart-total" id="cartTotal" style="display: none;">
+            <h5>Order Summary</h5>
+            <div class="total-amount" id="totalAmount">$0.00</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+          <button type="button" class="btn btn-primary" onclick="proceedToCheckout()" id="checkoutBtn" disabled>
+            <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5>ShopHub</h5>
+                <p>Your trusted partner in discovering premium quality products that enhance your lifestyle and bring value to every purchase.</p>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5>Quick Links</h5>
+                <ul>
+                    <li><a href="Firstpage.html">Home</a></li>
+                    <li><a href="category.html">Categories</a></li>
+                    <li><a href="NewProduct.html">New Products</a></li>
+                    <li><a href="BestSellers.html">Best Sellers</a></li>
+                    <li><a href="promotion.html">Promotions</a></li>
+                    <li><a href="aboutUs.html">About Us</a></li>
+                    <li><a href="review.html">Reviews</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5>Customer Care</h5>
+                <ul>
+                    <li><a href="support-center.html">Support Center</a></li>
+                    <li><a href="easy-returns.html">Easy Returns</a></li>
+                    <li><a href="fast-shipping.html">Fast Shipping</a></li>
+                    <li><a href="order-tracking.html">Order Tracking</a></li>
+                </ul>
+            </div>
+        </div>
+        </div>
+        <hr style="border-color: #555;">
+        <div class="text-center">
+    <p>&copy; 2025 ShopHub. All rights reserved. Crafted with care for exceptional shopping experiences. (Just learning purpose)</p>
+    
+    <p>Some pictures from:</p>
+    <ul style="list-style-type: none; padding: 0;">
+        <li><a href="https://www.vintagehardware.com" target="_blank">Vintage Hardware</a></li>
+        <li><a href="https://shopee.com.my/list/candle" target="_blank">Shopee (Candle Section)</a></li>
+        <li><a href="https://www.lecreuset.com.my" target="_blank">Le Creuset Malaysia(mug product)</a></li>
+        <li><a href="http://www.ebay.com" target="_blank">eBay (Snail Mucin Serum Product)</a></li>
+    </ul>
+</div>
+    </div>
+</footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script>
+    // Product Database
+    const PRODUCT_DATABASE = {
+      'brassdoor1': {
+        id: 'brassdoor1',
+        name: 'Classic Brass Door Handle',
+        price: 21.99,
+        image: 'asset/BrassDoor1.png',
+        category: 'Home Hardware',
+        description: 'Premium classic brass door handle with elegant finish',
+        featured: true,
+        bestseller: true,
+        inStock: true,
+        tags: ['brass', 'door', 'hardware', 'classic']
+      },
+      'brassdoor5': {
+        id: 'brassdoor5',
+        name: 'Decorative Brass Door Handle',
+        price: 32.99,
+        image: 'asset/BrassDoor5.png',
+        category: 'Home Hardware',
+        description: 'Ornate decorative brass door handle for luxury homes',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['brass', 'door', 'hardware', 'decorative', 'luxury']
+      },
+      'brassdoor6': {
+        id: 'brassdoor6',
+        name: 'Premium Brass Door Handle',
+        price: 35.99,
+        image: 'asset/BrassDoor6.png',
+        category: 'Home Hardware',
+        description: 'High-end premium brass door handle with superior craftsmanship',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['brass', 'door', 'hardware', 'premium']
+      },
+      'brassdoor7': {
+        id: 'brassdoor7',
+        name: 'Luxury Brass Door Handle',
+        price: 38.99,
+        image: 'asset/BrassDoor7.png',
+        category: 'Home Hardware',
+        description: 'Luxury brass door handle with exquisite detailing',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['brass', 'door', 'hardware', 'luxury']
+      },
+      'brassdoor8': {
+        id: 'brassdoor8',
+        name: 'Elite Brass Door Handle',
+        price: 41.99,
+        image: 'asset/BrassDoor8.png',
+        category: 'Home Hardware',
+        description: 'Elite brass door handle for the most discerning customers',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['brass', 'door', 'hardware', 'elite']
+      },
+      'mug1': {
+        id: 'mug1',
+        name: 'Stainless Steel Tumbler - Black',
+        price: 49.99,
+        image: 'asset/mug3.png',
+        category: 'Drinkware',
+        description: 'Premium stainless steel tumbler in elegant black finish',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'stainless steel', 'black', 'drinkware']
+      },
+      'mug2': {
+        id: 'mug2',
+        name: 'Insulated Tumbler - Orange',
+        price: 52.99,
+        image: 'asset/mug1.png',
+        category: 'Drinkware',
+        description: 'Double-walled insulated tumbler in vibrant orange',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'insulated', 'orange', 'drinkware']
+      },
+      'mug3': {
+        id: 'mug3',
+        name: 'Travel Tumbler - Pink',
+        price: 54.99,
+        image: 'asset/mug2.png',
+        category: 'Drinkware',
+        description: 'Portable travel tumbler in stylish pink color',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'travel', 'pink', 'drinkware', 'portable']
+      },
+      'mug5': {
+        id: 'mug5',
+        name: 'Sport Tumbler - Blue',
+        price: 58.99,
+        image: 'asset/mug4.png',
+        category: 'Drinkware',
+        description: 'Sport-designed tumbler perfect for active lifestyles',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'sport', 'blue', 'drinkware', 'active']
+      },
+      'mug6': {
+        id: 'mug6',
+        name: 'Premium Tumbler - Red',
+        price: 61.99,
+        image: 'asset/mug5.png',
+        category: 'Drinkware',
+        description: 'Premium quality tumbler in striking red finish',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'premium', 'red', 'drinkware']
+      },
+      'mug7': {
+        id: 'mug7',
+        name: 'Eco Tumbler - Yellow',
+        price: 64.99,
+        image: 'asset/mug6.png',
+        category: 'Drinkware',
+        description: 'Environmentally friendly tumbler in bright yellow',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'eco', 'yellow', 'drinkware', 'environmental']
+      },
+      'mug8': {
+        id: 'mug8',
+        name: 'Luxury Tumbler - Green',
+        price: 67.99,
+        image: 'asset/mug7.png',
+        category: 'Drinkware',
+        description: 'Luxury tumbler with premium materials in green',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['tumbler', 'luxury', 'green', 'drinkware']
+      },
+      'lavender-candle': {
+        id: 'lavender-candle',
+        name: 'Premium Lavender Scented Candle',
+        price: 69.99,
+        image: 'asset/Lavender_Candle.png',
+        category: 'Candles',
+        description: 'Luxurious lavender scented candle for relaxation and aromatherapy',
+        featured: true,
+        bestseller: true,
+        inStock: true,
+        tags: ['candle', 'lavender', 'aromatherapy', 'relaxation', 'scented']
+      },
+      'lavendercandle': {
+        id: 'lavendercandle',
+        name: 'Aromatherapy Lavender Candle',
+        price: 72.99,
+        image: 'asset/LavenderCandle.png',
+        category: 'Candles',
+        description: 'Therapeutic lavender candle for stress relief and tranquility',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'lavender', 'aromatherapy', 'therapeutic']
+      },
+      'soycandle': {
+        id: 'soycandle',
+        name: 'Soy Blend Lavender Box Candle',
+        price: 75.99,
+        image: 'asset/Candle_SoyBlend_Lavender_BoxCandle.png',
+        category: 'Candles',
+        description: 'Natural soy blend lavender candle in elegant box packaging',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'soy', 'lavender', 'natural', 'box']
+      },
+      'provencecandle': {
+        id: 'provencecandle',
+        name: 'Provence Lavender Luxury Candle',
+        price: 89.99,
+        image: 'asset/ProvenceLavenderCandle.png',
+        category: 'Candles',
+        description: 'Authentic Provence lavender luxury candle imported from France',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'provence', 'lavender', 'luxury', 'french']
+      },
+      'votivecandle': {
+        id: 'votivecandle',
+        name: 'Votive Lavender Candle',
+        price: 45.99,
+        image: 'asset/Votive_Lavender_Front.png',
+        category: 'Candles',
+        description: 'Small votive lavender candle perfect for intimate settings',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'votive', 'lavender', 'small', 'intimate']
+      },
+      'softlavendercandle': {
+        id: 'softlavendercandle',
+        name: 'Soft Lavender Scented Candle',
+        price: 67.99,
+        image: 'asset/SoftLavender.png',
+        category: 'Candles',
+        description: 'Gentle soft lavender scented candle for subtle aromatherapy',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'soft', 'lavender', 'gentle', 'subtle']
+      },
+      'whiteagecandle': {
+        id: 'whiteagecandle',
+        name: 'White Sage Lavender Candle',
+        price: 78.99,
+        image: 'asset/whitesagelavender.png',
+        category: 'Candles',
+        description: 'Cleansing white sage and lavender blend candle',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'white sage', 'lavender', 'cleansing', 'blend']
+      },
+      'tasmanian-candle': {
+        id: 'tasmanian-candle',
+        name: 'Tasmanian Lavender Soy Candle',
+        price: 82.99,
+        image: 'asset/tasmanian-lavender-scented-soy-candle.png',
+        category: 'Candles',
+        description: 'Premium Tasmanian lavender soy candle with pure ingredients',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['candle', 'tasmanian', 'lavender', 'soy', 'pure']
+      },
+      'skincare': {
+        id: 'skincare',
+        name: 'Advanced Snail Mucin Serum',
+        price: 59.99,
+        image: 'asset/SnailMucinSerum.png',
+        category: 'Skincare',
+        description: 'Revolutionary snail mucin serum for skin repair and hydration',
+        featured: true,
+        bestseller: true,
+        inStock: true,
+        tags: ['serum', 'snail mucin', 'skincare', 'hydration', 'repair']
+      },
+      'snailserum2': {
+        id: 'snailserum2',
+        name: 'Hydrating Snail Essence',
+        price: 62.99,
+        image: 'asset/SnailMucinSerum2.png',
+        category: 'Skincare',
+        description: 'Intensive hydrating essence with snail secretion filtrate',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['essence', 'snail', 'hydrating', 'skincare']
+      },
+      'snailserum3': {
+        id: 'snailserum3',
+        name: 'Repair Snail Treatment',
+        price: 65.99,
+        image: 'asset/SnailMucinSerum3.png',
+        category: 'Skincare',
+        description: 'Intensive repair treatment with concentrated snail mucin',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['treatment', 'snail', 'repair', 'skincare', 'intensive']
+      },
+      'snailserum4': {
+        id: 'snailserum4',
+        name: 'Premium Snail Concentrate',
+        price: 68.99,
+        image: 'asset/SnailMucinSerum4.png',
+        category: 'Skincare',
+        description: 'Premium concentrated snail mucin for advanced skincare',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['concentrate', 'snail', 'premium', 'skincare', 'advanced']
+      },
+      'snailserum5': {
+        id: 'snailserum5',
+        name: 'Intensive Snail Ampoule',
+        price: 71.99,
+        image: 'asset/SnailMucinSerum5.png',
+        category: 'Skincare',
+        description: 'Intensive snail ampoule for deep skin restoration',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['ampoule', 'snail', 'intensive', 'skincare', 'restoration']
+      },
+      'snailserum6': {
+        id: 'snailserum6',
+        name: 'Rejuvenating Snail Serum',
+        price: 74.99,
+        image: 'asset/SnailMucinSerum6.png',
+        category: 'Skincare',
+        description: 'Rejuvenating snail serum for youthful, radiant skin',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['serum', 'snail', 'rejuvenating', 'skincare', 'radiant']
+      },
+      'snailproduct': {
+        id: 'snailproduct',
+        name: 'Complete Snail Care Set',
+        price: 89.99,
+        image: 'asset/SnailMucinSerumProduct.png',
+        category: 'Skincare',
+        description: 'Complete skincare set with multiple snail-based products',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['set', 'snail', 'complete', 'skincare', 'multiple']
+      },
+      'snailinterface': {
+        id: 'snailinterface',
+        name: 'Professional Snail Interface',
+        price: 94.99,
+        image: 'asset/SnailMucinSerumInterface.png',
+        category: 'Skincare',
+        description: 'Professional-grade snail mucin treatment system',
+        featured: false,
+        bestseller: false,
+        inStock: true,
+        tags: ['professional', 'snail', 'interface', 'skincare', 'system']
+      }
+    };
+
+    // Cart Manager
+    class CartManager {
+      constructor() {
+        this.cart = [];
+        this.loadCart();
+      }
+
+      addItem(productId) {
+        const product = PRODUCT_DATABASE[productId];
+        if (!product) return;
+
+        const existingItem = this.cart.find(item => item.id === productId);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          this.cart.push({
+            id: productId,
+            name: product.name,
+            price: product.price,
+            quantity: 1
+          });
+        }
+        this.saveCart();
+        this.updateCartCount();
+        showToast(`${product.name} has been added to your cart!`, 'success');
+      }
+
+      loadCart() {
+        const savedCart = getCookie('shoppingCart');
+        if (savedCart) {
+          try {
+            this.cart = JSON.parse(savedCart);
+          } catch (e) {
+            this.cart = [];
+          }
+        }
+      }
+
+      saveCart() {
+        setCookie('shoppingCart', JSON.stringify(this.cart), 7);
+        setCookie('lastAddedItem', JSON.stringify({
+          id: this.cart[this.cart.length - 1].id,
+          name: this.cart[this.cart.length - 1].name,
+          price: this.cart[this.cart.length - 1].price,
+          timestamp: new Date().toISOString()
+        }), 1);
+      }
+
+      getTotalItems() {
+        return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+      }
+
+      updateCartCount() {
+        document.getElementById('cartCount').textContent = this.getTotalItems();
+      }
+
+      removeItem(productId) {
+        this.cart = this.cart.filter(item => item.id !== productId);
+        this.saveCart();
+        this.renderCartModal();
+      }
+
+      updateQuantity(productId, quantity) {
+        const item = this.cart.find(item => item.id === productId);
+        if (item) {
+          if (quantity <= 0) {
+            this.removeItem(productId);
+          } else {
+            item.quantity = quantity;
+            this.saveCart();
+            this.renderCartModal();
+          }
+        }
+      }
+
+      getTotal() {
+        return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+      }
+
+      renderCartModal() {
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const totalAmount = document.getElementById('totalAmount');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        if (!cartItems) return;
+
+        if (this.cart.length === 0) {
+          cartItems.innerHTML = `
+            <div class="text-center py-4">
+              <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">Your cart is empty</h5>
+              <p class="text-muted">Browse our categories to find amazing products</p>
+            </div>
+          `;
+          cartTotal.style.display = 'none';
+          checkoutBtn.disabled = true;
+          return;
+        }
+
+        cartItems.innerHTML = this.cart.map(item => `
+          <div class="cart-item">
+            <div class="cart-item-info">
+              <div class="cart-item-title">${item.name}</div>
+              <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+            </div>
+            <div class="quantity-controls">
+              <button class="quantity-btn" onclick="cartManager.updateQuantity('${item.id}', ${item.quantity - 1})">
+                <i class="fas fa-minus"></i>
+              </button>
+              <span class="quantity-display">${item.quantity}</span>
+              <button class="quantity-btn" onclick="cartManager.updateQuantity('${item.id}', ${item.quantity + 1})">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <button class="remove-item" onclick="cartManager.removeItem('${item.id}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `).join('');
+
+        const total = this.getTotal();
+        totalAmount.textContent = `$${total.toFixed(2)}`;
+        cartTotal.style.display = 'block';
+        checkoutBtn.disabled = false;
+      }
+    }
+
+    // Search Manager
+    class SearchManager {
+      constructor() {
+        this.searchInput = document.getElementById('searchInput');
+        this.searchResults = document.getElementById('searchResults');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.searchInput.addEventListener('input', () => {
+          const query = this.searchInput.value.trim();
+          if (query) {
+            this.performSearch(query);
+          } else {
+            this.hideResults();
+          }
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!this.searchInput.contains(e.target) && !this.searchResults.contains(e.target)) {
+            this.hideResults();
+          }
+        });
+      }
+
+      performSearch(query) {
+        const results = this.searchProducts(query);
+        this.displayResults(results);
+      }
+
+      searchProducts(query) {
+        const searchTerm = query.toLowerCase();
+        const results = [];
+
+        Object.values(PRODUCT_DATABASE).forEach(product => {
+          let score = 0;
+          if (product.name.toLowerCase().includes(searchTerm)) score += 10;
+          if (product.category.toLowerCase().includes(searchTerm)) score += 5;
+          product.tags.forEach(tag => {
+            if (tag.toLowerCase().includes(searchTerm)) score += 3;
+          });
+          if (product.description.toLowerCase().includes(searchTerm)) score += 2;
+
+          if (score > 0) {
+            results.push({ ...product, score });
+          }
+        });
+
+        return results.sort((a, b) => b.score - a.score).slice(0, 8);
+      }
+
+      displayResults(results) {
+        if (results.length === 0) {
+          this.searchResults.innerHTML = `
+            <div class="search-result-item">
+              <div class="search-result-name">No products found</div>
+              <div class="search-result-category">Try different keywords</div>
+            </div>
+          `;
+        } else {
+          this.searchResults.innerHTML = results.map(product => `
+            <div class="search-result-item" onclick="goToProduct('${product.id}')">
+              <div class="search-result-name">${product.name}</div>
+              <div class="search-result-price">$${product.price.toFixed(2)}</div>
+              <div class="search-result-category">${product.category}</div>
+            </div>
+          `).join('');
+        }
+        this.showResults();
+      }
+
+      showResults() {
+        this.searchResults.style.display = 'block';
+      }
+
+      hideResults() {
+        this.searchResults.style.display = 'none';
+      }
+    }
+
+    // Category Display Manager
+    class CategoryDisplayManager {
+      constructor() {
+        this.currentFilter = 'all';
+        this.loadAllProducts();
+      }
+
+      loadAllProducts() {
+        this.renderProducts(Object.values(PRODUCT_DATABASE));
+      }
+
+      filterByCategory(category) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.textContent.toLowerCase() === category.toLowerCase() || (category === 'all' && btn.textContent === 'All Products')) {
+            btn.classList.add('active');
+          }
+        });
+
+        this.currentFilter = category;
+
+        let filteredProducts;
+        if (category === 'all') {
+          filteredProducts = Object.values(PRODUCT_DATABASE);
+        } else {
+          filteredProducts = Object.values(PRODUCT_DATABASE).filter(product => 
+            product.category === category
+          );
+        }
+
+        this.renderProducts(filteredProducts);
+        showToast(`Showing ${filteredProducts.length} products in ${category === 'all' ? 'all categories' : category}`, 'success');
+      }
+
+      renderProducts(products) {
+        const container = document.getElementById('productsContainer');
+        if (!container) return;
+
+        if (products.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-5">
+              <i class="fas fa-search fa-3x text-muted mb-3"></i>
+              <h3 class="text-muted">No products found</h3>
+              <p class="text-muted">Try adjusting your search or filter criteria</p>
+            </div>
+          `;
+          return;
+        }
+
+        const groupedProducts = this.groupProductsByCategory(products);
+
+        let html = '';
+        Object.entries(groupedProducts).forEach(([category, categoryProducts]) => {
+          const categoryIcons = {
+            'Home Hardware': '🚪',
+            'Drinkware': '🥤',
+            'Candles': '🕯️',
+            'Skincare': '✨'
+          };
+
+          html += `
+            <div class="category-label">${categoryIcons[category] || '📦'} ${category}</div>
+            <h2 class="section-title">${category} Collection</h2>
+            <div class="row g-4 mb-5">
+              ${categoryProducts.map(product => this.createProductCard(product)).join('')}
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      }
+
+      groupProductsByCategory(products) {
+        const grouped = {};
+        products.forEach(product => {
+          if (!grouped[product.category]) {
+            grouped[product.category] = [];
+          }
+          grouped[product.category].push(product);
+        });
+        return grouped;
+      }
+
+      createProductCard(product) {
+        return `
+          <div class="col-lg-3 col-md-6">
+            <div class="product-card" onclick="goToProduct('${product.id}')">
+              <div class="product-image">
+                <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div class="product-info">
+                <h5 class="product-title">${product.name}</h5>
+                <div class="product-price">$${product.price.toFixed(2)}</div>
+                <div class="spacer"></div>
+                <button class="add-to-cart" onclick="event.stopPropagation(); cartManager.addItem('${product.id}')">
+                  <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Utility Functions
+    function showToast(message, type = 'success') {
+      const toastContainer = document.getElementById('toastContainer');
+      const toastId = 'toast-' + Date.now();
+
+      const iconClass = type === 'success' ? 'fa-check-circle text-success' : 'fa-exclamation-triangle text-warning';
+      const borderColor = type === 'success' ? '#28a745' : '#ffc107';
+
+      const toast = document.createElement('div');
+      toast.className = 'toast custom-toast';
+      toast.id = toastId;
+      toast.style.borderLeftColor = borderColor;
+      toast.innerHTML = `
+        <div class="toast-header">
+          <i class="fas ${iconClass} me-2"></i>
+          <strong class="me-auto">ShopHub</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+          ${message}
+        </div>
+      `;
+
+      toastContainer.appendChild(toast);
+      const bsToast = new bootstrap.Toast(toast);
+      bsToast.show();
+
+      toast.addEventListener('hidden.bs.toast', () => {
+        toast.remove();
+      });
+    }
+
+    function setCookie(name, value, days) {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        let c = cookie.trim();
+        if (c.indexOf(nameEQ) == 0) {
+          return c.substring(nameEQ.length);
+        }
+      }
+      return null;
+    }
+
+    // User Management
+    let user = {
+      name: '',
+      email: '',
+      preferences: {},
+      visitCount: 0,
+      sessionId: '',
+      sessionStart: '',
+      isLoggedIn: false
+    };
+
+    function initializeUser() {
+      const savedUser = localStorage.getItem('userData');
+      if (savedUser) {
+        try {
+          const userData = JSON.parse(savedUser);
+          user.name = userData.name || '';
+          user.email = userData.email || '';
+          user.preferences = userData.preferences || {};
+          user.visitCount = userData.visitCount || 0;
+          user.isLoggedIn = userData.isLoggedIn || false;
+        } catch (e) {
+          user.name = '';
+          user.email = '';
+          user.preferences = {};
+          user.visitCount = 0;
+          user.isLoggedIn = false;
+        }
+      }
+
+      user.visitCount += 1;
+
+      const sessionData = sessionStorage.getItem('sessionData');
+      if (!sessionData) {
+        user.sessionId = generateSessionId();
+        user.sessionStart = new Date().toISOString();
+        const sessionObj = {
+          sessionId: user.sessionId,
+          sessionStart: user.sessionStart,
+          expires: new Date(Date.now() + 60 * 60 * 1000).toISOString()
+        };
+        sessionStorage.setItem('sessionData', JSON.stringify(sessionObj));
+      } else {
+        try {
+          const sessionObj = JSON.parse(sessionData);
+          const expirationTime = new Date(sessionObj.expires);
+          if (expirationTime > new Date()) {
+            user.sessionId = sessionObj.sessionId;
+            user.sessionStart = sessionObj.sessionStart;
+          } else {
+            user.sessionId = generateSessionId();
+            user.sessionStart = new Date().toISOString();
+            const newSessionObj = {
+              sessionId: user.sessionId,
+              sessionStart: user.sessionStart,
+              expires: new Date(Date.now() + 60 * 60 * 1000).toISOString()
+            };
+            sessionStorage.setItem('sessionData', JSON.stringify(newSessionObj));
+          }
+        } catch (e) {
+          user.sessionId = generateSessionId();
+          user.sessionStart = new Date().toISOString();
+          const newSessionObj = {
+            sessionId: user.sessionId,
+            sessionStart: user.sessionStart,
+            expires: new Date(Date.now() + 60 * 60 * 1000).toISOString()
+          };
+          sessionStorage.setItem('sessionData', JSON.stringify(newSessionObj));
+        }
+      }
+
+      if (!user.isLoggedIn && !user.name && user.visitCount === 1) {
+        const userName = prompt('Welcome to ShopHub! What\'s your name?');
+        if (userName) {
+          user.name = userName;
+        }
+      }
+
+      localStorage.setItem('userData', JSON.stringify({
+        name: user.name,
+        email: user.email,
+        preferences: user.preferences,
+        visitCount: user.visitCount,
+        isLoggedIn: user.isLoggedIn
+      }));
+
+      setCookie('visited', 'true', 30);
+      setCookie('visitCount', user.visitCount.toString(), 30);
+      setCookie('userData', JSON.stringify(user), 30);
+    }
+
+    function showWelcomeMessage() {
+      const welcomeMsg = document.getElementById('welcomeMessage');
+      const welcomeText = document.getElementById('welcomeText');
+
+      if (user.isLoggedIn && user.name) {
+        welcomeText.textContent = `Welcome back, ${user.name}!`;
+      } else if (user.isLoggedIn) {
+        welcomeText.textContent = `Welcome back!`;
+      } else if (user.name) {
+        welcomeText.textContent = `Welcome back, ${user.name}!`;
+      } else if (user.visitCount > 1) {
+        welcomeText.textContent = `Welcome back, valued customer!`;
+      } else {
+        welcomeText.textContent = `Welcome to ShopHub!`;
+      }
+
+      setTimeout(() => {
+        welcomeMsg.classList.add('show');
+      }, 1000);
+
+      setTimeout(() => {
+        welcomeMsg.classList.remove('show');
+      }, 6000);
+    }
+
+    function closeWelcome() {
+      document.getElementById('welcomeMessage').classList.remove('show');
+    }
+
+    function generateSessionId() {
+      return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+    }
+
+    function goToProduct(productId) {
+      setCookie('returnPage', 'category', 1);
+      setCookie('selectedProduct', productId, 1);
+      window.location.href = `productDetail.html?product=${productId}`;
+    }
+
+    function showCartModal() {
+      cartManager.renderCartModal();
+      const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+      cartModal.show();
+    }
+
+    function proceedToCheckout() {
+      if (cartManager.cart.length === 0) {
+        showToast('Your cart is empty', 'warning');
+        return;
+      }
+
+      const total = cartManager.getTotal();
+      showToast(`Proceeding to checkout with ${cartManager.getTotalItems()} items (Total: $${total.toFixed(2)})`, 'success');
+    }
+
+    // Initialize
+    let cartManager;
+    let searchManager;
+    let categoryDisplayManager;
+
+    $(document).ready(function() {
+      initializeUser();
+      cartManager = new CartManager();
+      searchManager = new SearchManager();
+      categoryDisplayManager = new CategoryDisplayManager();
+      showWelcomeMessage();
+
+      // Handle URL query parameter for category filtering
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category') || 'all';
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.toLowerCase() === category.toLowerCase() || (category === 'all' && btn.textContent === 'All Products')) {
+          btn.classList.add('active');
+        }
+      });
+      categoryDisplayManager.filterByCategory(category);
+
+      // Smooth scrolling
+      $('a[href^="#"]').on('click', function(event) {
+        event.preventDefault();
+        const target = $(this.getAttribute('href'));
+        if (target.length) {
+          $('html, body').animate({
+            scrollTop: target.offset().top - 80
+          }, 800);
+        }
+      });
+
+      // Track user interactions
+      $(document).on('click', 'button, a', function() {
+        const element = $(this);
+        const analytics = JSON.parse(getCookie('userAnalytics') || '[]');
+        analytics.push({
+          action: 'click',
+          data: {
+            element: element.prop('tagName'),
+            text: element.text().trim(),
+            class: element.attr('class')
+          },
+          timestamp: new Date().toISOString()
+        });
+        setCookie('userAnalytics', JSON.stringify(analytics.slice(-50)), 1);
+      });
+    });
+  </script>
+</body>
+</html>

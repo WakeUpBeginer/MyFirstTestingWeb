@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopHub - Promotions & Best Deals</title>
+<!-- Bootstrap CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'Poppins', sans-serif;
+line-height: 1.6;
+color: #333;
+}
+
+/* Header Styles */
+.navbar {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+padding: 1rem 0;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+font-weight: 700;
+font-size: 1.8rem;
+color: white !important;
+}
+
+.navbar-nav .nav-link {
+color: white !important;
+font-weight: 500;
+margin: 0 0.5rem;
+transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+color: #f8f9fa !important;
+transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link.active {
+color: #f8f9fa !important;
+}
+
+.search-box {
+position: relative;
+max-width: 400px;
+}
+
+.search-box input {
+border-radius: 25px;
+padding: 0.5rem 1rem;
+border: none;
+width: 100%;
+}
+
+.search-box button {
+position: absolute;
+right: 5px;
+top: 50%;
+transform: translateY(-50%);
+border: none;
+background: #667eea;
+color: white;
+border-radius: 50%;
+width: 35px;
+height: 35px;
+}
+
+/* Hero Section */
+.hero-section {
+background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+padding: 100px 0;
+color: white;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+.hero-section::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+background-size: cover;
+}
+
+.hero-content {
+position: relative;
+z-index: 2;
+}
+
+.hero-title {
+font-size: 3.5rem;
+font-weight: 700;
+margin-bottom: 1rem;
+animation: fadeInUp 1s ease;
+}
+
+.hero-subtitle {
+font-size: 1.3rem;
+margin-bottom: 2rem;
+opacity: 0.9;
+animation: fadeInUp 1s ease 0.3s both;
+}
+
+.cta-button {
+background: white;
+color: #ee5a24;
+padding: 15px 40px;
+border: none;
+border-radius: 50px;
+font-weight: 600;
+font-size: 1.1rem;
+text-decoration: none;
+display: inline-block;
+transition: all 0.3s ease;
+animation: fadeInUp 1s ease 0.6s both;
+box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.cta-button:hover {
+transform: translateY(-3px);
+box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+color: #ee5a24;
+}
+
+/* Promotional Sections */
+.promo-section {
+padding: 80px 0;
+}
+
+.promo-section:nth-child(even) {
+background: #f8f9fa;
+}
+
+.section-title {
+text-align: center;
+font-size: 2.5rem;
+font-weight: 600;
+margin-bottom: 3rem;
+color: #333;
+position: relative;
+}
+
+.section-title::after {
+content: '';
+position: absolute;
+bottom: -10px;
+left: 50%;
+transform: translateX(-50%);
+width: 80px;
+height: 4px;
+background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+border-radius: 2px;
+}
+
+.promo-card {
+background: white;
+border-radius: 20px;
+overflow: hidden;
+transition: all 0.3s ease;
+border: none;
+box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+height: 100%;
+cursor: pointer;
+position: relative;
+}
+
+.promo-card:hover {
+transform: translateY(-10px);
+box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.promo-image {
+height: 280px;
+overflow: hidden;
+position: relative;
+}
+
+.promo-image img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.3s ease;
+}
+
+.promo-card:hover .promo-image img {
+transform: scale(1.05);
+}
+
+.promo-info {
+padding: 2rem;
+}
+
+.promo-title {
+font-size: 1.4rem;
+font-weight: 600;
+margin-bottom: 1rem;
+color: #333;
+}
+
+.promo-price {
+font-size: 1.8rem;
+font-weight: 700;
+color: #ee5a24;
+margin-bottom: 1rem;
+}
+
+.promo-original-price {
+font-size: 1.2rem;
+color: #999;
+text-decoration: line-through;
+margin-left: 10px;
+}
+
+.promo-discount {
+position: absolute;
+top: 15px;
+right: 15px;
+background: #ff6b6b;
+color: white;
+padding: 8px 15px;
+border-radius: 20px;
+font-size: 0.9rem;
+font-weight: 600;
+}
+
+.bestseller-badge {
+position: absolute;
+top: 15px;
+left: 15px;
+background: #28a745;
+color: white;
+padding: 8px 15px;
+border-radius: 20px;
+font-size: 0.9rem;
+font-weight: 600;
+}
+
+.new-arrival-badge {
+position: absolute;
+top: 15px;
+left: 15px;
+background: #007bff;
+color: white;
+padding: 8px 15px;
+border-radius: 20px;
+font-size: 0.9rem;
+font-weight: 600;
+}
+
+.add-to-cart {
+background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+color: white;
+border: none;
+padding: 12px 25px;
+border-radius: 25px;
+font-weight: 500;
+transition: all 0.3s ease;
+width: 100%;
+font-size: 1rem;
+}
+
+.add-to-cart:hover {
+background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+transform: translateY(-2px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Special Offer Banner */
+.special-offer {
+background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+padding: 60px 0;
+text-align: center;
+margin: 80px 0;
+position: relative;
+overflow: hidden;
+}
+
+.special-offer::before {
+content: '🔥';
+position: absolute;
+font-size: 8rem;
+opacity: 0.1;
+top: 50%;
+left: 10%;
+transform: translateY(-50%);
+}
+
+.special-offer::after {
+content: '💫';
+position: absolute;
+font-size: 6rem;
+opacity: 0.1;
+top: 20%;
+right: 10%;
+}
+
+.offer-title {
+font-size: 2.5rem;
+font-weight: 700;
+color: #d63031;
+margin-bottom: 1rem;
+}
+
+.offer-subtitle {
+font-size: 1.2rem;
+color: #2d3436;
+margin-bottom: 2rem;
+}
+
+.offer-button {
+background: #d63031;
+color: white;
+padding: 15px 40px;
+border: none;
+border-radius: 50px;
+font-weight: 600;
+font-size: 1.1rem;
+text-decoration: none;
+display: inline-block;
+transition: all 0.3s ease;
+box-shadow: 0 8px 25px rgba(214, 48, 49, 0.3);
+}
+
+.offer-button:hover {
+background: #b71c1c;
+transform: translateY(-3px);
+box-shadow: 0 12px 35px rgba(214, 48, 49, 0.4);
+color: white;
+}
+
+/* Footer */
+.footer {
+background: #333;
+color: white;
+padding: 40px 0 20px;
+}
+
+.footer h5 {
+font-weight: 600;
+margin-bottom: 1rem;
+}
+
+.footer ul {
+list-style: none;
+padding: 0;
+}
+
+.footer ul li {
+margin-bottom: 0.5rem;
+}
+
+.footer ul li a {
+color: #ccc;
+text-decoration: none;
+transition: color 0.3s ease;
+}
+
+.footer ul li a:hover {
+color: white;
+}
+
+.cart-count {
+background: #f5576c;
+color: white;
+border-radius: 50%;
+padding: 2px 6px;
+font-size: 0.8rem;
+position: absolute;
+top: -5px;
+right: -5px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+@keyframes pulse {
+0% { transform: scale(1); }
+50% { transform: scale(1.05); }
+100% { transform: scale(1); }
+}
+
+.pulse-animation {
+animation: pulse 2s infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+.hero-title {
+font-size: 2.5rem;
+}
+
+.hero-subtitle {
+font-size: 1.1rem;
+}
+
+.section-title {
+font-size: 2rem;
+}
+
+.search-box {
+margin: 1rem 0;
+}
+
+.offer-title {
+font-size: 2rem;
+}
+
+.promo-image {
+height: 220px;
+}
+}
+</style>
+</head>
+
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="Firstpage.html">
+                <i class="fas fa-shopping-bag"></i> ShopHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Firstpage.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="NewProduct.html">New Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="BestSellers.html">Best Sellers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="promotion.html">Promotions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="aboutUs.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="review.html">Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+                <div class="search-box d-flex me-3 position-relative">
+                    <input type="text" class="form-control" placeholder="Discover amazing products..." id="searchInput">
+                    <button type="button" onclick="searchManager.performSearch(document.getElementById('searchInput').value)">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="cart.html" onclick="showCartModal()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cartCount" class="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="account.html" onclick="showLoginPrompt()">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="container">
+<div class="hero-content">
+<h1 class="hero-title">🔥 Unbeatable Deals & Promotions</h1>
+<p class="hero-subtitle">Discover amazing discounts on our premium products - Limited time offers you don't want to miss!</p>
+<a href="#promotions" class="cta-button">Shop Now & Save</a>
+</div>
+</div>
+</section>
+
+<!-- Special Offer Banner -->
+<section class="special-offer">
+<div class="container">
+<h2 class="offer-title">LIMITED TIME OFFER!</h2>
+<p class="offer-subtitle">Get up to 30% OFF on selected items + FREE shipping on orders over $100</p>
+<a href="#bestsellers" class="offer-button pulse-animation">Claim Your Discount</a>
+</div>
+</section>
+
+<!-- Best Sellers Section -->
+<section id="bestsellers" class="promo-section">
+<div class="container">
+<h2 class="section-title">🏆 Best Sellers</h2>
+<div class="row g-4">
+<div class="col-lg-6 col-md-6">
+<div class="promo-card" onclick="goToProduct('home-hardware')">
+<div class="bestseller-badge">Best Seller</div>
+<div class="promo-discount">27% OFF</div>
+<div class="promo-image">
+<img src="asset/BrassDoor1.png" alt="Brass Door Handle">
+</div>
+<div class="promo-info">
+<h5 class="promo-title">Classic Brass Door Handle</h5>
+<div class="promo-price">
+$21.99
+<span class="promo-original-price">$29.99</span>
+</div>
+<button class="add-to-cart" onclick="event.stopPropagation(); addToCart('home-hardware', 'Classic Brass Door Handle', 21.99)">
+<i class="fas fa-cart-plus me-2"></i>Add to Cart
+</button>
+</div>
+</div>
+</div>
+<div class="col-lg-6 col-md-6">
+<div class="promo-card" onclick="goToProduct('lavender-candle')">
+<div class="bestseller-badge">Best Seller</div>
+<div class="promo-discount">22% OFF</div>
+<div class="promo-image">
+<img src="asset/Lavender_Candle.png" alt="Lavender Scented Candle">
+</div>
+<div class="promo-info">
+<h5 class="promo-title">Premium Lavender Scented Candle</h5>
+<div class="promo-price">
+$69.99
+<span class="promo-original-price">$89.99</span>
+</div>
+<button class="add-to-cart" onclick="event.stopPropagation(); addToCart('lavender-candle', 'Premium Lavender Scented Candle', 69.99)">
+<i class="fas fa-cart-plus me-2"></i>Add to Cart
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- New Arrivals Section -->
+<section id="newarrivals" class="promo-section">
+<div class="container">
+<h2 class="section-title">✨ New Arrivals</h2>
+<div class="row g-4">
+<div class="col-lg-6 col-md-6">
+<div class="promo-card" onclick="goToProduct('mug3')">
+<div class="new-arrival-badge">New</div>
+<div class="promo-discount">20% OFF</div>
+<div class="promo-image">
+<img src="asset/mugLook.png" alt="Stainless Steel Water Bottle">
+</div>
+<div class="promo-info">
+<h5 class="promo-title">Eco-Friendly Water Bottle</h5>
+<div class="promo-price">
+$54.99
+<span class="promo-original-price">$65.99</span>
+</div>
+<button class="add-to-cart" onclick="event.stopPropagation(); addToCart('water-bottle', 'Eco-Friendly Water Bottle', 79.99)">
+<i class="fas fa-cart-plus me-2"></i>Add to Cart
+</button>
+</div>
+</div>
+</div>
+<div class="col-lg-6 col-md-6">
+<div class="promo-card" onclick="goToProduct('skincare')">
+<div class="new-arrival-badge">New</div>
+<div class="promo-discount">Special Price</div>
+<div class="promo-image">
+<img src="asset/SnailMucinSerum.png" alt="Skincare Essentials Pack">
+</div>
+<div class="promo-info">
+<h5 class="promo-title">Advanced Snail Mucin Serum</h5>
+<div class="promo-price">
+$59.99
+<span class="promo-original-price">$79.99</span>
+</div>
+<button class="add-to-cart" onclick="event.stopPropagation(); addToCart('skincare', 'Advanced Snail Mucin Serum', 59.99)">
+<i class="fas fa-cart-plus me-2"></i>Add to Cart
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>ShopHub</h5>
+                    <p>Your trusted partner in discovering premium quality products that enhance your lifestyle and bring value to every purchase.</p>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="Firstpage.html">Home</a></li>
+                        <li><a href="category.html">Categories</a></li>
+                        <li><a href="NewProduct.html">New Products</a></li>
+                        <li><a href="BestSellers.html">Best Sellers</a></li>
+                        <li><a href="promotion.html">Promotions</a></li>
+                        <li><a href="aboutUs.html">About Us</a></li>
+                        <li><a href="review.html">Reviews</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Customer Care</h5>
+                    <ul>
+                        <li><a href="support-center.html">Support Center</a></li>
+                        <li><a href="easy-returns.html">Easy Returns</a></li>
+                        <li><a href="fast-shipping.html">Fast Shipping</a></li>
+                        <li><a href="order-tracking.html">Order Tracking</a></li>
+                    </ul>
+                </div>
+            </div>
+           </div>
+        <hr style="border-color: #555;">
+        <div class="text-center">
+    <p>&copy; 2025 ShopHub. All rights reserved. Crafted with care for exceptional shopping experiences. (Just learning purpose)</p>
+    
+    <p>Some pictures from:</p>
+    <ul style="list-style-type: none; padding: 0;">
+        <li><a href="https://www.vintagehardware.com" target="_blank">Vintage Hardware</a></li>
+        <li><a href="https://shopee.com.my/list/candle" target="_blank">Shopee (Candle Section)</a></li>
+        <li><a href="https://www.lecreuset.com.my" target="_blank">Le Creuset Malaysia(mug product)</a></li>
+        <li><a href="http://www.ebay.com" target="_blank">eBay (Snail Mucin Serum Product)</a></li>
+    </ul>
+</div>
+        </div>
+    </footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<script>
+// Storage Technologies Implementation (matching Firstpage.html functionality)
+let cart = [];
+let user = {
+name: '',
+preferences: {},
+visitCount: 0
+};
+
+// Initialize page
+$(document).ready(function() {
+initializeStorage();
+loadUserData();
+loadCart();
+updateCartCount();
+});
+
+// Initialize storage technologies
+function initializeStorage() {
+// Check if user has visited before (using cookies)
+if (!getCookie('visited')) {
+setCookie('visited', 'true', 30);
+user.visitCount = 1;
+} else {
+user.visitCount = parseInt(getCookie('visitCount') || '1') + 1;
+}
+setCookie('visitCount', user.visitCount.toString(), 30);
+
+// Load user preferences from memory storage
+const savedPreferences = JSON.parse(getCookie('userPreferences') || '{}');
+user.preferences = savedPreferences;
+
+// Initialize session data
+if (!getCookie('sessionId')) {
+setCookie('sessionId', generateSessionId(), 1);
+setCookie('sessionStart', new Date().toISOString(), 1);
+}
+}
+
+// Cookie management functions
+function setCookie(name, value, days) {
+const expires = new Date();
+expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+const nameEQ = name + "=";
+const cookies = document.cookie.split(';');
+for (let cookie of cookies) {
+let c = cookie.trim();
+if (c.indexOf(nameEQ) == 0) {
+return c.substring(nameEQ.length);
+}
+}
+return null;
+}
+
+// Load user data
+function loadUserData() {
+const savedUser = getCookie('userData');
+if (savedUser) {
+try {
+const userData = JSON.parse(savedUser);
+user.name = userData.name || '';
+} catch (e) {
+user.name = savedUser;
+}
+}
+}
+
+// Cart functionality
+function addToCart(productId, productName, price) {
+const existingItem = cart.find(item => item.id === productId);
+if (existingItem) {
+existingItem.quantity += 1;
+} else {
+cart.push({
+id: productId,
+name: productName,
+price: price,
+quantity: 1
+});
+}
+
+// Save to cookie storage
+setCookie('shoppingCart', JSON.stringify(cart), 7);
+
+// Update session storage with last added item
+setCookie('lastAddedItem', JSON.stringify({
+id: productId,
+name: productName,
+price: price,
+timestamp: new Date().toISOString()
+}), 1);
+
+updateCartCount();
+
+// Show feedback with promotional messaging
+alert(`🎉 ${productName} added to your cart!\n\n💰 You're saving money with our exclusive promotions!\n🚚 Free shipping on orders over $100!`);
+}
+
+function loadCart() {
+const savedCart = getCookie('shoppingCart');
+if (savedCart) {
+try {
+cart = JSON.parse(savedCart);
+} catch (e) {
+cart = [];
+}
+}
+}
+
+function updateCartCount() {
+const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+document.getElementById('cartCount').textContent = totalItems;
+}
+
+function showCart() {
+if (cart.length === 0) {
+alert('🛒 Your cart is empty!\n\n✨ Check out our amazing promotional deals and start saving today!');
+return;
+}
+
+let cartSummary = '🛒 Your Shopping Cart:\n\n';
+let total = 0;
+cart.forEach(item => {
+cartSummary += `${item.name} - $${item.price.toFixed(2)} × ${item.quantity}\n`;
+total += item.price * item.quantity;
+});
+
+cartSummary += `\n💰 Subtotal: $${total.toFixed(2)}`;
+if (total >= 100) {
+cartSummary += `\n🚚 FREE SHIPPING included!`;
+} else {
+cartSummary += `\n🚚 Add $${(100 - total).toFixed(2)} more for FREE shipping!`;
+}
+cartSummary += `\n\n🎉 Ready to checkout and enjoy your savings?`;
+
+alert(cartSummary);
+}
+
+function showAccount() {
+const sessionId = getCookie('sessionId');
+const sessionStart = getCookie('sessionStart');
+
+let accountInfo = `👤 Your Account Dashboard:\n\n`;
+accountInfo += `Name: ${user.name || 'Welcome Guest'}\n`;
+accountInfo += `Total Visits: ${user.visitCount}\n`;
+accountInfo += `Session ID: ${sessionId || 'New Session'}\n`;
+
+if (sessionStart) {
+accountInfo += `Current Session: ${new Date(sessionStart).toLocaleString()}\n`;
+}
+
+accountInfo += `\n🎁 Thank you for being part of the ShopHub community!\n💸 Don't miss our exclusive promotional offers!`;
+
+alert(accountInfo);
+}
+
+function searchProducts() {
+const searchTerm = document.getElementById('searchInput').value;
+if (searchTerm.trim()) {
+// Save search preference
+const searches = JSON.parse(getCookie('searchHistory') || '[]');
+searches.unshift(searchTerm);
+// Keep only last 10 searches
+if (searches.length > 10) searches.pop();
+setCookie('searchHistory', JSON.stringify(searches), 30);
+
+alert(`🔍 Searching for "${searchTerm}"...\n\n💡 Pro tip: Check our promotions section for the best deals on your searched items!`);
+} else {
+alert('🔍 Enter a search term to find amazing promotional deals!');
+}
+}
+
+function generateSessionId() {
+return 'promo_session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+}
+
+// Navigation to product page
+function goToProduct(productType) {
+setCookie('returnPage', 'promotion', 1);
+window.location.href = `productDetail.html?product=${productType}`;
+}
+
+// Smooth scrolling for navigation links
+$('a[href^="#"]').on('click', function(event) {
+event.preventDefault();
+const target = $(this.getAttribute('href'));
+if (target.length) {
+$('html, body').animate({
+scrollTop: target.offset().top - 80
+}, 800);
+}
+});
+
+// Track user interactions for analytics
+function trackUserAction(action, data) {
+const analytics = JSON.parse(getCookie('userAnalytics') || '[]');
+analytics.push({
+action: action,
+data: data,
+timestamp: new Date().toISOString(),
+page: 'promotions'
+});
+
+// Store in cookie with 1 day expiry for session analytics
+setCookie('userAnalytics', JSON.stringify(analytics.slice(-50)), 1);
+}
+
+// Track page interactions
+$(document).on('click', 'button, a', function() {
+const element = $(this);
+trackUserAction('click', {
+element: element.prop('tagName'),
+text: element.text().trim(),
+class: element.attr('class'),
+page: 'promotions'
+});
+});
+
+// Add promotional countdown timer effect
+function startPromotionalCountdown() {
+const countdownElements = document.querySelectorAll('.promo-discount');
+countdownElements.forEach(element => {
+setInterval(() => {
+element.style.animation = 'pulse 1s ease-in-out';
+setTimeout(() => {
+element.style.animation = '';
+}, 1000);
+}, 3000);
+});
+}
+
+// Initialize promotional effects
+setTimeout(startPromotionalCountdown, 2000);
+</script>
+</body>
+</html>
